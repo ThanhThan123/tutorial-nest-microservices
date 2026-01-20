@@ -8,7 +8,7 @@ module.exports = {
       // Regex parse commit message
       // Format: <type>#<scope>: <subject>
       // Ví dụ: feat#auth: thêm chức năng đăng nhập với JWT
-      headerPattern: /^(\w+)#(\w+): (.*)$/,
+      headerPattern: /^(\w*)\/#(\w*): (.*)$/,
 
       // Ánh xạ các group trong regex vào field của commitlint
       headerCorrespondence: ['type', 'scope', 'subject'],
