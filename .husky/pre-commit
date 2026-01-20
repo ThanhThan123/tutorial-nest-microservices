@@ -1,2 +1,4 @@
+#!/usr/bin/env sh
+
 pnpx lint-staged
 nx run-many -t lint
