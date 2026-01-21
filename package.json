@@ -13,6 +13,7 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/microservices": "^11.1.12",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/swagger": "^11.2.5",
     "axios": "^1.6.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
