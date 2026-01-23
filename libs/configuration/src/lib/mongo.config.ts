@@ -1,0 +1,57 @@
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Connection } from 'mongoose';
+import { Logger } from '@nestjs/common';
+export class MongoConfiguration {
+  @IsString()
+  @IsNotEmpty()
+  URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DB_NAME: string;
+
+  @IsNumber()
+  @IsOptional()
+  POOL_SIZE?: number;
+
+  @IsNumber()
+  @IsOptional()
+  CONNECTION_TIMEOUT_MS?: number;
+
+  @IsNumber()
+  @IsOptional()
+  SOCKET_TIME_MS?: number;
+
+  constructor(data?: Partial<MongoConfiguration>) {
+    this.URL = data?.URL || process.env['MONGODB_URI'] || '';
+    this.DB_NAME = data?.DB_NAME || process.env['MONGODB_DB_NAME'] || '';
+    this.POOL_SIZE = data?.POOL_SIZE || Number(process.env['MONGODB_POOL_SIZE']) || 10;
+    this.CONNECTION_TIMEOUT_MS =
+      data?.CONNECTION_TIMEOUT_MS || Number(process.env['MONGODB_CONNECTION_TIMEOUT_MS']) || 15000;
+    this.SOCKET_TIME_MS = data?.SOCKET_TIME_MS || Number(process.env['MONGODB_SOCKET_TIME_MS']) || 360000;
+  }
+}
+
+export const MongoProvider = MongooseModule.forRootAsync({
+  imports: [ConfigModule],
+  inject: [ConfigService],
+  useFactory: async (configService: ConfigService) => ({
+    uri: configService.get('MONGO_CONFIG.URL'),
+    dbName: configService.get('MONGO_CONFIG.DB_NAME'),
+    maxPoolSize: configService.get('MONGO_CONFIG.POOL_SIZE'),
+    connectTimeoutMS: configService.get('MONGO_CONFIG.CONNECT_TIMEOUT_MS'),
+    socketTimeoutMS: configService.get('MONGO_CONFIG.SOCKET_TIMEOUT_MS'),
+
+    onConnectionCreate: (connection: Connection) => {
+      connection.on('connection', () => Logger.log('Sucesss >>> connected'));
+      connection.on('open', () => Logger.log('Sucesss >>> open'));
+      connection.on('disconnected', () => Logger.log('axe >>> disconnected'));
+      connection.on('reconnected', () => Logger.log('Recon >>> reconnected'));
+      connection.on('disconnecting', () => Logger.log('axe >>> disconnecting'));
+
+      return connection;
+    },
+  }),
+});
