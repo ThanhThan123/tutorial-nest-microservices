@@ -30,4 +30,6 @@ export const createSchema = <TClass = any>(target: Type<TClass>) => {
   schema.set('versionKey', false);
 
   schema.set('timestamps', true);
+
+  return schema;
 };
