@@ -18,7 +18,7 @@ export class MongoConfiguration {
 
   @IsNumber()
   @IsOptional()
-  CONNECTION_TIMEOUT_MS?: number;
+  CONNECT_TIMEOUT_MS?: number;
 
   @IsNumber()
   @IsOptional()
@@ -28,8 +28,7 @@ export class MongoConfiguration {
     this.URL = data?.URL || process.env['MONGODB_URI'] || '';
     this.DB_NAME = data?.DB_NAME || process.env['MONGODB_DB_NAME'] || '';
     this.POOL_SIZE = data?.POOL_SIZE || Number(process.env['MONGODB_POOL_SIZE']) || 10;
-    this.CONNECTION_TIMEOUT_MS =
-      data?.CONNECTION_TIMEOUT_MS || Number(process.env['MONGODB_CONNECTION_TIMEOUT_MS']) || 15000;
+    this.CONNECT_TIMEOUT_MS = data?.CONNECT_TIMEOUT_MS || Number(process.env['MONGODB_CONNECT_TIMEOUT_MS']) || 15000;
     this.SOCKET_TIME_MS = data?.SOCKET_TIME_MS || Number(process.env['MONGODB_SOCKET_TIME_MS']) || 360000;
   }
 }
