@@ -9,7 +9,7 @@ import { ProcessId } from '@common/decorators/processId.decorator';
 import { CreateProductTcpRequest, ProductTcpResponse } from '@common/interfaces/tcp/product';
 import { map } from 'rxjs';
 @ApiTags('Products')
-@Controller()
+@Controller('product')
 export class ProductController {
   constructor(@Inject(TCP_SERVICES.PRODUCT_SERVICE) private readonly productClient: TcpClient) {}
 
