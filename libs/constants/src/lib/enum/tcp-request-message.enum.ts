@@ -5,6 +5,11 @@ enum INVOICE {
   DELETE_BY_ID = 'invoice.delete_by_id',
 }
 
+enum PRODUCT {
+  CREATE = 'product.create',
+  GET_LIST = 'product.get_list',
+}
 export const TCP_RESQUEST_MESSSAGE = {
   INVOICE,
+  PRODUCT,
 };
