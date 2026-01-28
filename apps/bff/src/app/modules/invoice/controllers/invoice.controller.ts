@@ -4,7 +4,7 @@ import { CreateInvoiceRequestDto, InvoiceResponseDto } from '@common/interfaces/
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { TCP_RESQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { CreateInvoiceTcpRequest, InvoiceTcpResponse } from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { map } from 'rxjs';
@@ -18,7 +18,7 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Create a new response' })
   create(@Body() body: CreateInvoiceRequestDto, @ProcessId() processId: string) {
     return this.invoiceClient
-      .send<InvoiceTcpResponse, CreateInvoiceTcpRequest>(TCP_RESQUEST_MESSSAGE.INVOICE.CREATE, {
+      .send<InvoiceTcpResponse, CreateInvoiceTcpRequest>(TCP_REQUEST_MESSSAGE.INVOICE.CREATE, {
         data: body,
         processId,
       })

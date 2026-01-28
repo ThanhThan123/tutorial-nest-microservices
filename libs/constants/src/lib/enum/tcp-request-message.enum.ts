@@ -13,7 +13,7 @@ enum USER {
   CREATE = 'user.create',
   GET_ALL = 'user.get_all',
 }
-export const TCP_RESQUEST_MESSSAGE = {
+export const TCP_REQUEST_MESSSAGE = {
   INVOICE,
   PRODUCT,
   USER,
