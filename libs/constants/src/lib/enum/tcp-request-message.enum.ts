@@ -9,7 +9,12 @@ enum PRODUCT {
   CREATE = 'product.create',
   GET_LIST = 'product.get_list',
 }
+enum USER {
+  CREATE = 'user.create',
+  GET_ALL = 'user.get_all',
+}
 export const TCP_RESQUEST_MESSSAGE = {
   INVOICE,
   PRODUCT,
+  USER,
 };
