@@ -1,6 +1,7 @@
 import { User, UserModel, UserModelName } from '@common/schemas/user.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import type { QueryFilter } from 'mongoose';
 
 @Injectable()
 export class UserRepository {
@@ -8,6 +9,16 @@ export class UserRepository {
 
   create(data: Partial<User>) {
     return this.userModel.create(data);
+  }
+
+  async getAll(filter: QueryFilter<User>, page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+    const [items, total] = await Promise.all([
+      this.userModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean().exec(),
+      this.userModel.countDocuments(filter),
+    ]);
+
+    return { items, total, page, limit };
   }
 
   getById(id: string) {

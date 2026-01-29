@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateUserRequestDto {
   @ApiProperty()
@@ -26,4 +27,28 @@ export class CreateUserRequestDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+}
+export class GetAllUsersQueryDto {
+  @IsOptional()
+  @IsString()
+  keyword?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit?: number = 10;
+}
+
+export class UserGetAllTcpRequest {
+  keyword?: string;
+  page?: number;
+  limit?: number;
 }

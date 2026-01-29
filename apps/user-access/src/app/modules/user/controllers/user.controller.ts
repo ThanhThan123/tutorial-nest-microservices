@@ -8,6 +8,7 @@ import { RequestParams } from '@common/decorators/request-param.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
+import { UserGetAllTcpRequest, UserGetAllTcpResponse } from '@common/interfaces/gateway/user';
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class UserController {
@@ -17,5 +18,12 @@ export class UserController {
   async create(@RequestParams() data: CreateUserTcpRequest) {
     await this.userService.create(data);
     return Response.success<string>(HTTP_MESSAGE.CREATED);
+  }
+
+  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.GET_ALL)
+  async getAll(@RequestParams() payload: any): Promise<Response<UserGetAllTcpResponse>> {
+    const params = payload?.data ?? payload ?? {};
+    const result = await this.userService.getAll(params);
+    return Response.success<UserGetAllTcpResponse>(result);
   }
 }

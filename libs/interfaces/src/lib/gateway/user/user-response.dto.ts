@@ -14,3 +14,11 @@ export class UserResponseDto extends BaseResponseDto {
   @ApiProperty()
   roles: string[];
 }
+
+export class UserGetAllTcpResponse {
+  items: UserResponseDto[];
+  total: number;
+  page: number;
+  limit: number;
+  keyword?: string;
+}
