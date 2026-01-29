@@ -1,22 +1,50 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { ERROR_CODE } from '@common/constants/enum/error-code.enum';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
-import { createUserRequestMapping, getUserRequestMapping } from '../mappers';
-import { UserGetAllTcpRequest, UserGetAllTcpResponse } from '@common/interfaces/gateway/user';
+import { createUserRequestMapping } from '../mappers';
+import { UserGetAllTcpRequest } from '@common/interfaces/gateway/user';
+import { TCP_SERVICES } from '@common/configuration/tcp.config';
+import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
+import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { CreateKeycloakUserTcpReq } from '@common/interfaces/tcp/authorizer';
+import { firstValueFrom, map } from 'rxjs';
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
-  async create(params: CreateUserTcpRequest) {
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject(TCP_SERVICES.AUTHORIZER_SERVICE) private readonly authorizerClient: TcpClient,
+  ) {}
+  async create(params: CreateUserTcpRequest, processId: string) {
     const isExist = await this.userRepository.exists(params.email);
 
     if (isExist) {
       throw new BadRequestException(ERROR_CODE.USER_ALREADY_EXISTS);
     }
 
-    const input = createUserRequestMapping(params);
+    const userId = await this.createKeycloakUser(
+      {
+        email: params.email,
+        firstName: params.firstName,
+        lastName: params.lastName,
+        password: params.password,
+      },
+      processId,
+    );
+    const input = createUserRequestMapping(params, userId);
 
     return this.userRepository.create(input);
+  }
+
+  async createKeycloakUser(data: CreateKeycloakUserTcpReq, processId: string) {
+    return firstValueFrom(
+      this.authorizerClient
+        .send<string>(TCP_REQUEST_MESSSAGE.KEYCLOAK.CREATE_USER, {
+          data,
+          processId,
+        })
+        .pipe(map((data) => data.data)),
+    );
   }
   async getAll(params: UserGetAllTcpRequest) {
     const page = Math.max(1, Number(params.page || 1));

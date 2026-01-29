@@ -65,3 +65,6 @@ services:
       - ./docker/docker_data/keycloak_data:/opt/keycloak/data
     networks:
       - einvoice-nw
+
+    # tk : student-02-f93e1e2c8db7@qwiklabs.net
+    # password: 9SW0lTrYDlLb
