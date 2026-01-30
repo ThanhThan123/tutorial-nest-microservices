@@ -12,6 +12,7 @@ import {
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { Authorization } from '@common/decorators/authorizer.decorator';
 import { map } from 'rxjs';
 @ApiTags('User')
 @Controller('user')
@@ -41,6 +42,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Get all new user',
   })
+  @Authorization({ secured: false })
   getAll(@Req() req: any, @Query() query: GetAllUsersQueryDto, @ProcessId() processId: string) {
     return this.userAccessClient
       .send<UserGetAllTcpResponse, UserGetAllTcpRequest>(TCP_REQUEST_MESSSAGE.USER.GET_ALL, {

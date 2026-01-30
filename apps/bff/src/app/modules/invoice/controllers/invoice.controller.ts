@@ -8,7 +8,6 @@ import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message
 import { CreateInvoiceTcpRequest, InvoiceTcpResponse } from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { map } from 'rxjs';
-
 @ApiTags('Invoice')
 @Controller('invoice')
 export class InvoiceController {
