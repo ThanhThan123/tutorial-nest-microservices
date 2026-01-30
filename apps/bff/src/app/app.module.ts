@@ -9,6 +9,8 @@ import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthorizerModule } from './modules/authorizer/authorizer.module';
 import { UserGuard } from '@common/guards/user.guard';
+import { ClientsModule } from '@nestjs/microservices';
+import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [() => CONFIGURATION] }),
@@ -16,6 +18,7 @@ import { UserGuard } from '@common/guards/user.guard';
     ProductModule,
     UserModule,
     AuthorizerModule,
+    ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE)]),
   ],
   controllers: [],
   providers: [
