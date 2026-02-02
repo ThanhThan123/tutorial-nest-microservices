@@ -11,6 +11,7 @@ import { AuthorizerModule } from './modules/authorizer/authorizer.module';
 import { UserGuard } from '@common/guards/user.guard';
 import { ClientsModule } from '@nestjs/microservices';
 import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
+import { PermissionGuard } from '@common/guards/permission.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [() => CONFIGURATION] }),
@@ -26,6 +27,10 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
     {
       provide: APP_GUARD,
       useClass: UserGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
     },
   ],
 })
