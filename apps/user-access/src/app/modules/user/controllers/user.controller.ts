@@ -8,8 +8,9 @@ import { RequestParams } from '@common/decorators/request-param.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
-import { UserGetAllTcpRequest, UserGetAllTcpResponse } from '@common/interfaces/gateway/user';
+import { UserGetAllTcpResponse } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
+import { User } from '@common/schemas/user.schema';
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class UserController {
@@ -26,5 +27,11 @@ export class UserController {
     const params = payload?.data ?? payload ?? {};
     const result = await this.userService.getAll(params);
     return Response.success<UserGetAllTcpResponse>(result);
+  }
+
+  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.GET_BY_USER_ID)
+  async getByUserId(@RequestParams() userId: string) {
+    const user = await this.userService.getUserByUserId(userId);
+    return Response.success<User>(user);
   }
 }

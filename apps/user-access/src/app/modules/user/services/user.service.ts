@@ -73,4 +73,8 @@ export class UserService {
       limit,
     };
   }
+
+  async getUserByUserId(userId: string) {
+    return await this.userRepository.getByUserId(userId);
+  }
 }
