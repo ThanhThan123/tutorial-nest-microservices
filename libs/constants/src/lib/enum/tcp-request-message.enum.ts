@@ -13,6 +13,7 @@ enum USER {
   CREATE = 'user.create',
   GET_ALL = 'user.get_all',
   GET_BY_USER_ID = 'user.get_by_user_id',
+  DELETE_BY_USER_ID = 'user.delete_by_user_id',
 }
 
 enum KEYCLOAK {

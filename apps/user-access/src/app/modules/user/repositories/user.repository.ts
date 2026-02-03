@@ -1,7 +1,7 @@
 import { User, UserModel, UserModelName } from '@common/schemas/user.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import type { QueryFilter } from 'mongoose';
+import type { DeleteResult, QueryFilter } from 'mongoose';
 
 @Injectable()
 export class UserRepository {
@@ -34,5 +34,9 @@ export class UserRepository {
   async exists(email: string) {
     const result = await this.userModel.exists({ email }).exec();
     return !!result;
+  }
+
+  deleteByUserId(userId: string): Promise<DeleteResult> {
+    return this.userModel.deleteOne({ userId }).exec();
   }
 }

@@ -1,16 +1,18 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { ERROR_CODE } from '@common/constants/enum/error-code.enum';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { createUserRequestMapping } from '../mappers';
-import { UserGetAllTcpRequest } from '@common/interfaces/gateway/user';
+import { UserGetAllTcpRequest, DeleteUserResponseDto } from '@common/interfaces/gateway/user';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { CreateKeycloakUserTcpReq } from '@common/interfaces/tcp/authorizer';
 import { firstValueFrom, map } from 'rxjs';
+import type { DeleteResult } from 'mongodb';
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(
     private readonly userRepository: UserRepository,
     @Inject(TCP_SERVICES.AUTHORIZER_SERVICE) private readonly authorizerClient: TcpClient,
@@ -76,5 +78,12 @@ export class UserService {
 
   async getUserByUserId(userId: string) {
     return await this.userRepository.getByUserId(userId);
+  }
+
+  async deleteUserByUserId(userId: string): Promise<DeleteUserResponseDto> {
+    const result: DeleteResult = await this.userRepository.deleteByUserId(userId);
+    const affected = result?.deletedCount ?? 0;
+
+    return { userId, success: affected > 0, affected };
   }
 }

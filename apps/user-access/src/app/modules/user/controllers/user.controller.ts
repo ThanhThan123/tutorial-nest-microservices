@@ -8,7 +8,7 @@ import { RequestParams } from '@common/decorators/request-param.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
-import { UserGetAllTcpResponse } from '@common/interfaces/gateway/user';
+import { UserGetAllTcpResponse, DeleteUserResponseDto } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { User } from '@common/schemas/user.schema';
 @Controller()
@@ -33,5 +33,10 @@ export class UserController {
   async getByUserId(@RequestParams() userId: string) {
     const user = await this.userService.getUserByUserId(userId);
     return Response.success<User>(user);
+  }
+  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.DELETE_BY_USER_ID)
+  async deleteByUserId(@RequestParams() userId: string): Promise<Response<DeleteUserResponseDto>> {
+    const dto = await this.userService.deleteUserByUserId(userId);
+    return Response.success(dto);
   }
 }

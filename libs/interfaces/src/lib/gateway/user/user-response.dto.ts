@@ -22,3 +22,9 @@ export class UserGetAllTcpResponse {
   limit: number;
   keyword?: string;
 }
+
+export class DeleteUserResponseDto {
+  userId: string;
+  success: boolean;
+  affected: number;
+}

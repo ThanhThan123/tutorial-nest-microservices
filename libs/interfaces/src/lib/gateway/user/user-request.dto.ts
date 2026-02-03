@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateUserRequestDto {
   @ApiProperty()
@@ -51,4 +51,11 @@ export class UserGetAllTcpRequest {
   keyword?: string;
   page?: number;
   limit?: number;
+}
+
+export class DeleteUserRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }
