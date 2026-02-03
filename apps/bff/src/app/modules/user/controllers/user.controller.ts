@@ -1,17 +1,17 @@
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { Body, Controller, Delete, Get, Inject, Param, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateUserRequestDto,
   GetAllUsersQueryDto,
   UserGetAllTcpRequest,
   UserGetAllTcpResponse,
-  DeleteUserRequestDto,
+  UpdateUserRequestDto,
 } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
-import { CreateUserTcpRequest, DeleteUserTcpRequest } from '@common/interfaces/tcp/user';
+import { CreateUserTcpRequest, DeleteUserTcpRequest, UpdateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { Authorization } from '@common/decorators/authorizer.decorator';
 import { map } from 'rxjs';
@@ -68,6 +68,26 @@ export class UserController {
     return this.userAccessClient
       .send<DeleteUserTcpRequest, string>(TCP_REQUEST_MESSSAGE.USER.DELETE_BY_USER_ID, {
         data: userId,
+        processId,
+      })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
+
+  @Patch('/users/:userId')
+  @ApiOkResponse({
+    type: ResponseDto<string>,
+  })
+  @ApiOperation({
+    summary: 'Update user',
+  })
+  @Authorization({ secured: true })
+  @Permissions([PERMISSION.USER_UPDATE])
+  update(@Param('userId') userId: string, @Body() body: UpdateUserRequestDto, @ProcessId() processId: string) {
+    const data: UpdateUserTcpRequest = { userId, ...body };
+
+    return this.userAccessClient
+      .send<string, UpdateUserTcpRequest>(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID, {
+        data,
         processId,
       })
       .pipe(map((res) => new ResponseDto(res)));

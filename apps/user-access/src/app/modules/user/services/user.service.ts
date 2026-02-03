@@ -86,4 +86,9 @@ export class UserService {
 
     return { userId, success: affected > 0, affected };
   }
+
+  async updateUserByUserId(data: any, userId: string) {
+    const result = await this.userRepository.updateByUserId(userId, data);
+    return result;
+  }
 }

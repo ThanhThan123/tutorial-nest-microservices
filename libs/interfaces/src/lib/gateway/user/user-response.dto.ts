@@ -28,3 +28,10 @@ export class DeleteUserResponseDto {
   success: boolean;
   affected: number;
 }
+
+export class UpdateUserResponseDto {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}

@@ -59,3 +59,20 @@ export class DeleteUserRequestDto {
   @IsNotEmpty()
   userId: string;
 }
+
+export class UpdateUserRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  firstName?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  lastName?: string;
+
+  @ApiProperty()
+  @IsEmail()
+  @IsNotEmpty()
+  email?: string;
+}

@@ -2,7 +2,7 @@ import { User, UserModel, UserModelName } from '@common/schemas/user.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { DeleteResult, QueryFilter } from 'mongoose';
-
+import { UpdateUserRequestDto } from '@common/interfaces/gateway/user';
 @Injectable()
 export class UserRepository {
   constructor(@InjectModel(UserModelName) private readonly userModel: UserModel) {}
@@ -38,5 +38,8 @@ export class UserRepository {
 
   deleteByUserId(userId: string): Promise<DeleteResult> {
     return this.userModel.deleteOne({ userId }).exec();
+  }
+  updateByUserId(userId: string, data: UpdateUserRequestDto) {
+    return this.userModel.updateOne({ userId }, data).exec();
   }
 }
