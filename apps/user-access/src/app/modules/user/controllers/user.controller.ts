@@ -8,7 +8,7 @@ import { RequestParams } from '@common/decorators/request-param.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
-import { UserGetAllTcpResponse, DeleteUserResponseDto } from '@common/interfaces/gateway/user';
+import { UserGetAllTcpResponse, DeleteUserResponseDto, FindOneUserResponseDto } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { User } from '@common/schemas/user.schema';
 @Controller()
@@ -45,6 +45,12 @@ export class UserController {
     const userId = params.userId;
     const data = params.data ?? params;
     const dto = await this.userService.updateUserByUserId(data, userId);
+    return Response.success(dto);
+  }
+
+  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.FIND_USER_BY_USER_ID)
+  async findOneByUserId(@RequestParams() userId: string): Promise<Response<FindOneUserResponseDto>> {
+    const dto = await this.userService.findOneByUserId(userId);
     return Response.success(dto);
   }
 }

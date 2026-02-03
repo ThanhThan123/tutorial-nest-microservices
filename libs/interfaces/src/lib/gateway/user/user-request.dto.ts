@@ -64,6 +64,27 @@ export class UpdateUserRequestDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  userId: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  firstName?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  lastName?: string;
+
+  @ApiProperty()
+  @IsEmail()
+  @IsNotEmpty()
+  email?: string;
+}
+
+export class FindOneUserRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   firstName?: string;
 
   @ApiProperty()

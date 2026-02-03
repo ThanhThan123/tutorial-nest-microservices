@@ -21,8 +21,8 @@ export class UserRepository {
     return { items, total, page, limit };
   }
 
-  getById(id: string) {
-    return this.userModel.findById(id).exec();
+  getById(userId: string) {
+    return this.userModel.findOne({ userId }).exec();
   }
 
   getByUserId(userId: string) {

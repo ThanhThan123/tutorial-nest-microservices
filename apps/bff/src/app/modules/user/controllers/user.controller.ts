@@ -9,6 +9,7 @@ import {
   UserGetAllTcpRequest,
   UserGetAllTcpResponse,
   UpdateUserRequestDto,
+  FindOneUserRequestDto,
 } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { CreateUserTcpRequest, DeleteUserTcpRequest, UpdateUserTcpRequest } from '@common/interfaces/tcp/user';
@@ -88,6 +89,24 @@ export class UserController {
     return this.userAccessClient
       .send<string, UpdateUserTcpRequest>(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID, {
         data,
+        processId,
+      })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
+
+  @Get('/users/:userId')
+  @ApiOkResponse({
+    type: ResponseDto<string>,
+  })
+  @ApiOperation({
+    summary: 'Find one user',
+  })
+  @Authorization({ secured: true })
+  @Permissions([PERMISSION.USER_GET_BY_ID])
+  findOne(@Param('userId') userId: string, @ProcessId() processId: string) {
+    return this.userAccessClient
+      .send<FindOneUserRequestDto, string>(TCP_REQUEST_MESSSAGE.USER.FIND_USER_BY_USER_ID, {
+        data: userId,
         processId,
       })
       .pipe(map((res) => new ResponseDto(res)));

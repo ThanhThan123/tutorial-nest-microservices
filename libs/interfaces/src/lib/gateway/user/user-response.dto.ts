@@ -35,3 +35,9 @@ export class UpdateUserResponseDto {
   lastName: string;
   email: string;
 }
+export class FindOneUserResponseDto {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}

@@ -91,4 +91,12 @@ export class UserService {
     const result = await this.userRepository.updateByUserId(userId, data);
     return result;
   }
+
+  async findOneByUserId(userId: string) {
+    const user = await this.userRepository.getById(userId);
+    if (!user) {
+      throw new UnauthorizedException(ERROR_CODE.USER_NOT_FOUND);
+    }
+    return user;
+  }
 }

@@ -15,6 +15,7 @@ enum USER {
   GET_BY_USER_ID = 'user.get_by_user_id',
   DELETE_BY_USER_ID = 'user.delete_by_user_id',
   UPDATE_BY_USER_ID = 'user.update_by_user_id',
+  FIND_USER_BY_USER_ID = 'user.find_user_by_user_id',
 }
 
 enum KEYCLOAK {
