@@ -1,9 +1,16 @@
-import { BadRequestException, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { ERROR_CODE } from '@common/constants/enum/error-code.enum';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { createUserRequestMapping } from '../mappers';
-import { UserGetAllTcpRequest, DeleteUserResponseDto } from '@common/interfaces/gateway/user';
+import { UserGetAllTcpRequest, DeleteUserResponseDto, UpdateUserRequestDto } from '@common/interfaces/gateway/user';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
@@ -87,9 +94,20 @@ export class UserService {
     return { userId, success: affected > 0, affected };
   }
 
-  async updateUserByUserId(data: any, userId: string) {
-    const result = await this.userRepository.updateByUserId(userId, data);
-    return result;
+  async updateUserByUserId(userId: string, patch: UpdateUserRequestDto) {
+    if (!userId) throw new BadRequestException('userId is required');
+    if (!patch || Object.keys(patch).length === 0) {
+      throw new BadRequestException('patch is empty');
+    }
+    //find
+    const existing = await this.userRepository.getById(userId);
+    if (!existing) throw new NotFoundException('USER_NOT_FOUND');
+    //update
+    const result = await this.userRepository.updateByUserId(userId, patch);
+
+    const matched = (result as any).matchedCount ?? 0;
+    const modified = (result as any).modifiedCount ?? 0;
+    return { userId, success: matched > 0 && modified > 0, matched, modified };
   }
 
   async findOneByUserId(userId: string) {

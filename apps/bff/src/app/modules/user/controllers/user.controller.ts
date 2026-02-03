@@ -10,6 +10,8 @@ import {
   UserGetAllTcpResponse,
   UpdateUserRequestDto,
   FindOneUserRequestDto,
+  UpdateUserResponseDto,
+  UpdateUserByUserIdTcpRequest,
 } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { CreateUserTcpRequest, DeleteUserTcpRequest, UpdateUserTcpRequest } from '@common/interfaces/tcp/user';
@@ -84,10 +86,10 @@ export class UserController {
   @Authorization({ secured: true })
   @Permissions([PERMISSION.USER_UPDATE])
   update(@Param('userId') userId: string, @Body() body: UpdateUserRequestDto, @ProcessId() processId: string) {
-    const data: UpdateUserTcpRequest = { userId, ...body };
+    const data: UpdateUserByUserIdTcpRequest = { userId, patch: body };
 
     return this.userAccessClient
-      .send<string, UpdateUserTcpRequest>(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID, {
+      .send<string, UpdateUserByUserIdTcpRequest>(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID, {
         data,
         processId,
       })

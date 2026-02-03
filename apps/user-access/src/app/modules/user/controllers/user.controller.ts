@@ -39,12 +39,13 @@ export class UserController {
     const dto = await this.userService.deleteUserByUserId(userId);
     return Response.success(dto);
   }
+
   @MessagePattern(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID)
-  async updateByUserId(@RequestParams() payload: any) {
-    const params = payload?.data ?? payload ?? {};
-    const userId = params.userId;
-    const data = params.data ?? params;
-    const dto = await this.userService.updateUserByUserId(data, userId);
+  async updateByUserId(@RequestParams() payload: any): Promise<Response<any>> {
+    const req = payload?.data ?? payload ?? {};
+    const userId = req.userId;
+    const patch = req.patch;
+    const dto = await this.userService.updateUserByUserId(userId, patch);
     return Response.success(dto);
   }
 

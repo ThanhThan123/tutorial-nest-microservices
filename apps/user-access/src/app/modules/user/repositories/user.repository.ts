@@ -39,7 +39,7 @@ export class UserRepository {
   deleteByUserId(userId: string): Promise<DeleteResult> {
     return this.userModel.deleteOne({ userId }).exec();
   }
-  updateByUserId(userId: string, data: UpdateUserRequestDto) {
-    return this.userModel.updateOne({ userId }, data).exec();
+  updateByUserId(userId: string, patch: UpdateUserRequestDto) {
+    return this.userModel.updateOne({ userId }, { $set: patch }, { runValidators: true }).exec();
   }
 }

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
@@ -63,24 +63,21 @@ export class DeleteUserRequestDto {
 export class UpdateUserRequestDto {
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
-  userId: string;
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
   firstName?: string;
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   lastName?: string;
 
   @ApiProperty()
   @IsEmail()
-  @IsNotEmpty()
   email?: string;
 }
 
+export class UpdateUserByUserIdTcpRequest {
+  userId: string;
+  patch: UpdateUserRequestDto;
+}
 export class FindOneUserRequestDto {
   @ApiProperty()
   @IsString()
