@@ -35,10 +35,11 @@ export class CreateProductRequestDto {
 }
 
 export class GetAllProductQueryDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   keyword?: string;
+
   @IsOptional()
   @Type(() => Number)
   @IsInt()

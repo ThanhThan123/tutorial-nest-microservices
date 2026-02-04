@@ -1,11 +1,17 @@
-import { Controller, Res, UseInterceptors } from '@nestjs/common';
+import { Controller, UseInterceptors } from '@nestjs/common';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
 import { ProductService } from '../services/product.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
-import { CreateProductTcpRequest, ProductTcpResponse, ProductListTcpResponse } from '@common/interfaces/tcp/product';
+import {
+  CreateProductTcpRequest,
+  ProductTcpResponse,
+  ProductListTcpResponse,
+  GetAllProductTcpRequest,
+} from '@common/interfaces/tcp/product';
 import { RequestParams } from '@common/decorators/request-param.decorator';
+
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class ProductController {
@@ -18,9 +24,8 @@ export class ProductController {
   }
 
   @MessagePattern(TCP_REQUEST_MESSSAGE.PRODUCT.GET_LIST)
-  async getList(@RequestParams() payload: any): Promise<Response<ProductListTcpResponse>> {
-    const query = payload?.data ?? payload ?? {};
-    const result = await this.productService.getList(query);
+  async getList(@RequestParams() payload: GetAllProductTcpRequest): Promise<Response<ProductListTcpResponse>> {
+    const result = await this.productService.getList(payload);
     return Response.success<ProductListTcpResponse>(result);
   }
 }

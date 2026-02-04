@@ -17,8 +17,9 @@ export class ProductReponsitory {
     const skip = (page - 1) * limit;
 
     const qb = this.repo.createQueryBuilder('p');
-    if (keyword) {
-      qb.andWhere('(p.name ILIKE :kw OR p.sku ILIKE :kw)', { kw: `%${keyword}%` });
+    if (keyword?.trim()) {
+      const kw = `%${keyword}%`;
+      qb.andWhere('(p.name ILIKE :kw OR p.sku ILIKE :kw)', { kw });
     }
 
     qb.orderBy('p.createdAt', 'DESC').skip(skip).take(limit);

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ProductReponsitory } from '../repositories/product.reponsitory';
+import { ProductReponsitory } from '../repositories/product.repository';
 import {
   CreateProductTcpRequest,
   GetAllProductTcpRequest,
@@ -41,7 +41,7 @@ export class ProductService {
         sku: p.sku,
         unit: p.unit,
         price: p.price,
-        varRate: (p as any).varRate ?? (p as any).varRate ?? 0,
+        vatRate: (p as any).varRate ?? (p as any).varRate ?? 0,
       })),
       meta: {
         page,
