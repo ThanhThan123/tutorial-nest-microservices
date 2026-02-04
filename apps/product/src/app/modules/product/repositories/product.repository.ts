@@ -30,6 +30,9 @@ export class ProductReponsitory {
   async findById(id: number): Promise<Product | null> {
     return this.repo.findOne({ where: { id } });
   }
+  async findBySku(sku: string): Promise<Product | null> {
+    return this.repo.findOne({ where: { sku } });
+  }
   async updateProduct(id: number, data: Partial<Product>): Promise<Product | null> {
     await this.repo.update(id, data);
     return this.findById(id);

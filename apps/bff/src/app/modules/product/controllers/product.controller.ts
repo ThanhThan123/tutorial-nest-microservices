@@ -1,7 +1,7 @@
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { Controller, Inject, Body, Post, Get, Query } from '@nestjs/common';
+import { Controller, Inject, Body, Post, Get, Query, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateProductRequestDto,
@@ -43,6 +43,16 @@ export class ProductController {
         ProductListTcpResponse,
         GetAllProductTcpRequest
       >(TCP_REQUEST_MESSSAGE.PRODUCT.GET_LIST, { data: query, processId })
+      .pipe(map((data) => new ResponseDto(data)));
+  }
+  @Get(':sku')
+  @ApiOkResponse({ type: ResponseDto<ProductResponseDto> })
+  getOne(@Param('sku') sku: string, @ProcessId() processId: string) {
+    return this.productClient
+      .send<ProductTcpResponse, string>(TCP_REQUEST_MESSSAGE.PRODUCT.GET_ONE_BY_SKU, {
+        data: sku,
+        processId,
+      })
       .pipe(map((data) => new ResponseDto(data)));
   }
 }

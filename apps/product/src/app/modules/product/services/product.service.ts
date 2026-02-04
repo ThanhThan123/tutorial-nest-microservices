@@ -51,4 +51,8 @@ export class ProductService {
       },
     };
   }
+
+  getOne(sku: string) {
+    return this.productReponsitory.findBySku(sku);
+  }
 }

@@ -8,6 +8,7 @@ enum INVOICE {
 enum PRODUCT {
   CREATE = 'product.create',
   GET_LIST = 'product.get_list',
+  GET_ONE_BY_SKU = 'product.get_one_by_sku',
 }
 enum USER {
   CREATE = 'user.create',
