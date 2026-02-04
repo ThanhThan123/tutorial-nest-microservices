@@ -10,3 +10,14 @@ export class BaseEntityResponseDto {
   @ApiProperty()
   updatedAt: Date;
 }
+
+export class PaginationMetaDto {
+  @ApiProperty()
+  page: number;
+  @ApiProperty()
+  limit: number;
+  @ApiProperty()
+  total: number;
+  @ApiProperty()
+  totalPages: number;
+}

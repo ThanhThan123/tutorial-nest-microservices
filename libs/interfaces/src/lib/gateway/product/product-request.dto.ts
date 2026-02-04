@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateProductRequestDto {
   @ApiProperty()
@@ -31,4 +32,23 @@ export class CreateProductRequestDto {
   @IsNumber()
   @IsNotEmpty()
   vatRate: number;
+}
+
+export class GetAllProductQueryDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  keyword?: string;
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit?: number = 10;
+
+  @ApiPropertyOptional()
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
+  page?: number = 1;
 }

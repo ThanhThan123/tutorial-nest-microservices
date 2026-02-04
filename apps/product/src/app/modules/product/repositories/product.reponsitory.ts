@@ -12,8 +12,18 @@ export class ProductReponsitory {
     return this.repo.save(entity);
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.repo.find();
+  async findPaged(params: { page: number; limit: number; keyword?: string }) {
+    const { page, limit, keyword } = params;
+    const skip = (page - 1) * limit;
+
+    const qb = this.repo.createQueryBuilder('p');
+    if (keyword) {
+      qb.andWhere('(p.name ILIKE :kw OR p.sku ILIKE :kw)', { kw: `%${keyword}%` });
+    }
+
+    qb.orderBy('p.createdAt', 'DESC').skip(skip).take(limit);
+    const [items, total] = await qb.getManyAndCount();
+    return { items, total };
   }
 
   async findById(id: number): Promise<Product | null> {

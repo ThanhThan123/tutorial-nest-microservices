@@ -1,11 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { BaseEntityResponseDto } from '../common/base-entity-response.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { BaseEntityResponseDto, PaginationMetaDto } from '../common/base-entity-response.dto';
 
 export class ProductResponseDto extends BaseEntityResponseDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   description: string;
 
   @ApiProperty()
@@ -19,4 +19,11 @@ export class ProductResponseDto extends BaseEntityResponseDto {
 
   @ApiProperty()
   vatRate: number;
+}
+
+export class GetAllProductResponseDto {
+  @ApiProperty({ type: ProductResponseDto, isArray: true })
+  items: ProductResponseDto[];
+  @ApiProperty()
+  meta: PaginationMetaDto;
 }
