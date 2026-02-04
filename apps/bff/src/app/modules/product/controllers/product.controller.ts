@@ -1,7 +1,7 @@
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { Controller, Inject, Body, Post, Get, Query, Param, Patch } from '@nestjs/common';
+import { Controller, Inject, Body, Post, Get, Query, Param, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateProductRequestDto,
@@ -32,7 +32,7 @@ export class ProductController {
   @ApiOkResponse({ type: ResponseDto<ProductResponseDto> })
   @ApiOperation({ summary: 'Create a new product' })
   @Authorization({ secured: true })
-  @Permissions([PERMISSION.USER_UPDATE])
+  @Permissions([PERMISSION.PRODUCT_CREATE])
   create(@Body() body: CreateProductRequestDto, @ProcessId() processId: string) {
     return this.productClient
       .send<ProductTcpResponse, CreateProductTcpRequest>(TCP_REQUEST_MESSSAGE.PRODUCT.CREATE, {
@@ -68,13 +68,23 @@ export class ProductController {
   @ApiOkResponse({ type: ResponseDto<ProductResponseDto> })
   @ApiOperation({ summary: 'Update Product' })
   @Authorization({ secured: true })
-  @Permissions([PERMISSION.USER_UPDATE])
+  @Permissions([PERMISSION.PRODUCT_UPDATE])
   update(@Param('sku') sku: string, @Body() body: UpdateProductRequestDto, @ProcessId() processId: string) {
     return this.productClient
       .send<ProductUpdateTcpResponse, UpdateProductBySkuRequest>(TCP_REQUEST_MESSSAGE.PRODUCT.UPDATE_PRODUCT_BY_SKU, {
         data: { sku, patch: body },
         processId,
       })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
+  @Delete(':id')
+  @ApiOkResponse({ type: ResponseDto<string> })
+  @ApiOperation({ summary: 'Delete Product' })
+  //@Authorization({ secured: true })
+  //@Permissions([PERMISSION.PRODUCT_DELETE])
+  delete(@Param('id', ParseIntPipe) id: number, @ProcessId() processId: string) {
+    return this.productClient
+      .send<string, number>(TCP_REQUEST_MESSSAGE.PRODUCT.DELETE_PRODUCT_BY_ID, { data: id, processId })
       .pipe(map((res) => new ResponseDto(res)));
   }
 }

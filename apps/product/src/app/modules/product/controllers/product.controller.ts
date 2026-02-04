@@ -45,4 +45,10 @@ export class ProductController {
     const result = await this.productService.updateProduct(sku, patch);
     return Response.success<ProductUpdateTcpResponse>(result);
   }
+  @MessagePattern(TCP_REQUEST_MESSSAGE.PRODUCT.DELETE_PRODUCT_BY_ID)
+  async delete(@RequestParams() payload: any) {
+    const id = Number(payload?.data ?? payload);
+    const result = await this.productService.deleteProduct(id);
+    return Response.success(result);
+  }
 }

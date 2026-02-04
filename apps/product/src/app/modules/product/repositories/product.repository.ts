@@ -1,7 +1,7 @@
 import { Product } from '@common/entities/product.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductReponsitory {
@@ -36,8 +36,8 @@ export class ProductReponsitory {
   async updateProduct(sku: string, data: Partial<Product>) {
     await this.repo.update({ sku }, data);
   }
-  async deleteProduct(id: number): Promise<void> {
-    await this.repo.delete(id);
+  async deleteProduct(id: number): Promise<DeleteResult> {
+    return this.repo.delete({ id });
   }
   async exists(sku: string, name: string): Promise<boolean> {
     const result = await this.repo.findOne({

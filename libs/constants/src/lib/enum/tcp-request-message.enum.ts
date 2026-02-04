@@ -10,6 +10,7 @@ enum PRODUCT {
   GET_LIST = 'product.get_list',
   GET_ONE_BY_SKU = 'product.get_one_by_sku',
   UPDATE_PRODUCT_BY_SKU = 'product.update_product_by_sku',
+  DELETE_PRODUCT_BY_ID = 'product.delete_product_by_id',
 }
 enum USER {
   CREATE = 'user.create',

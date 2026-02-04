@@ -62,4 +62,7 @@ export class ProductService {
 
     return this.productReponsitory.findBySku(sku);
   }
+  async deleteProduct(id: number) {
+    return await this.productReponsitory.deleteProduct(id);
+  }
 }
