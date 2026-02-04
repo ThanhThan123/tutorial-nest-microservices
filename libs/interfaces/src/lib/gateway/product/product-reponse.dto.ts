@@ -5,7 +5,7 @@ export class ProductResponseDto extends BaseEntityResponseDto {
   @ApiProperty()
   name: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   description: string;
 
   @ApiProperty()
@@ -26,4 +26,21 @@ export class GetAllProductResponseDto {
   items: ProductResponseDto[];
   @ApiProperty()
   meta: PaginationMetaDto;
+}
+
+export class UpdateProductResponseDto {
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
+  unit: string;
+
+  @ApiProperty()
+  price: number;
+
+  @ApiProperty()
+  vatRate: number;
 }

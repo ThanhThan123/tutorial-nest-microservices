@@ -6,7 +6,7 @@ export class Product extends BaseEntity {
   name: string;
 
   @Column({ type: 'text', nullable: true })
-  description?: string;
+  description: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
   sku: string;
@@ -18,5 +18,5 @@ export class Product extends BaseEntity {
   price: number;
 
   @Column({ type: 'float', default: 0 })
-  varRate: number;
+  vatRate: number;
 }

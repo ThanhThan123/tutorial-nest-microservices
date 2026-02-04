@@ -9,6 +9,8 @@ import {
   ProductTcpResponse,
   ProductListTcpResponse,
   GetAllProductTcpRequest,
+  ProductUpdateTcpResponse,
+  UpdateProductBySkuTcpRequest,
 } from '@common/interfaces/tcp/product';
 import { RequestParams } from '@common/decorators/request-param.decorator';
 
@@ -32,5 +34,15 @@ export class ProductController {
   async getOne(@RequestParams() sku: string) {
     const result = await this.productService.getOne(sku);
     return Response.success<ProductTcpResponse>(result);
+  }
+  @MessagePattern(TCP_REQUEST_MESSSAGE.PRODUCT.UPDATE_PRODUCT_BY_SKU)
+  async update(
+    @RequestParams()
+    payload: UpdateProductBySkuTcpRequest,
+  ): Promise<Response<ProductUpdateTcpResponse>> {
+    const sku = payload.sku;
+    const patch = payload.patch;
+    const result = await this.productService.updateProduct(sku, patch);
+    return Response.success<ProductUpdateTcpResponse>(result);
   }
 }

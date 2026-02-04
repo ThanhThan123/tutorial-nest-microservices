@@ -53,3 +53,35 @@ export class GetAllProductQueryDto {
   @Type(() => Number)
   page?: number = 1;
 }
+
+export class UpdateProductRequestDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  unit?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  price?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  vatRate?: number;
+}
+
+export class UpdateProductBySkuRequest {
+  sku: string;
+  patch: UpdateProductRequestDto;
+}

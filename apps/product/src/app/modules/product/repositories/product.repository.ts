@@ -33,9 +33,8 @@ export class ProductReponsitory {
   async findBySku(sku: string): Promise<Product | null> {
     return this.repo.findOne({ where: { sku } });
   }
-  async updateProduct(id: number, data: Partial<Product>): Promise<Product | null> {
-    await this.repo.update(id, data);
-    return this.findById(id);
+  async updateProduct(sku: string, data: Partial<Product>) {
+    await this.repo.update({ sku }, data);
   }
   async deleteProduct(id: number): Promise<void> {
     await this.repo.delete(id);

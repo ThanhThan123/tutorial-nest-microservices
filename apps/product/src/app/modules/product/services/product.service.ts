@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductReponsitory } from '../repositories/product.repository';
 import {
   CreateProductTcpRequest,
   GetAllProductTcpRequest,
+  UpdateProductTcpRequest,
   ProductListTcpResponse,
 } from '@common/interfaces/tcp/product';
 
@@ -53,6 +54,12 @@ export class ProductService {
   }
 
   getOne(sku: string) {
+    return this.productReponsitory.findBySku(sku);
+  }
+
+  async updateProduct(sku: string, patch: UpdateProductTcpRequest) {
+    const result = await this.productReponsitory.updateProduct(sku, patch);
+
     return this.productReponsitory.findBySku(sku);
   }
 }
