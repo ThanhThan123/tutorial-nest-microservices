@@ -33,4 +33,7 @@ export class InvoiceService {
   async updateInvoiceById(id: string, patch: UpdateInvoiceRequestDto) {
     return this.invoiceRepository.updateById(id, patch);
   }
+  async deleteInvoiceById(id: string) {
+    return this.invoiceRepository.deleteById(id);
+  }
 }

@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Invoice, InvoiceModel, InvoiceModelName } from '@common/schemas/invoice.schema';
 import { INVOICE_STATUS } from '@common/constants/enum/invoice.enum';
-import { UpdateInvoiceTcpRequest } from '@common/interfaces/tcp/invoice';
 import { UpdateInvoiceRequestDto } from '@common/interfaces/gateway/invoice';
-
+import { DeleteResult } from 'mongodb';
 @Injectable()
 export class InvoiceReponsitory {
   constructor(@InjectModel(InvoiceModelName) private readonly invoiceModel: InvoiceModel) {}
@@ -51,7 +50,7 @@ export class InvoiceReponsitory {
     return this.invoiceModel.findByIdAndUpdate(id, patch, { new: true, runValidators: true }).exec();
   }
 
-  deleteById(id: string) {
-    return this.invoiceModel.findByIdAndDelete(id);
+  deleteById(id: string): Promise<DeleteResult> {
+    return this.invoiceModel.deleteOne({ _id: id }).exec();
   }
 }

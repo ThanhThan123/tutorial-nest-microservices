@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Logger, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateInvoiceRequestDto,
@@ -78,6 +78,15 @@ export class InvoiceController {
         data: { id, patch },
         processId,
       })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
+
+  @Delete(':id')
+  @ApiOkResponse({ type: ResponseDto<InvoiceResponseDto> })
+  @ApiOperation({ summary: 'Delete invoice by id' })
+  delete(@Query('id') id: string, @ProcessId() processId: string) {
+    return this.invoiceClient
+      .send<string, string>(TCP_REQUEST_MESSSAGE.INVOICE.DELETE_BY_ID, { data: id, processId })
       .pipe(map((res) => new ResponseDto(res)));
   }
 }

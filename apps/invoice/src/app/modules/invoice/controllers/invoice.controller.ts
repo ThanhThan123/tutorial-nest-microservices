@@ -44,4 +44,10 @@ export class InvoiceController {
 
     return Response.success<InvoiceTcpResponse>(dto);
   }
+  @MessagePattern(TCP_REQUEST_MESSSAGE.INVOICE.DELETE_BY_ID)
+  async deleteInvoiceById(@RequestParams() payload: any) {
+    const id = (payload?.data ?? payload) as string;
+    const dto = await this.invoiceService.deleteInvoiceById(id);
+    return Response.success(dto);
+  }
 }
