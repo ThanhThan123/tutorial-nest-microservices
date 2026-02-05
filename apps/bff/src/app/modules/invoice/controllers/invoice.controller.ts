@@ -1,11 +1,16 @@
-import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Logger, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateInvoiceRequestDto, InvoiceResponseDto } from '@common/interfaces/gateway/invoice';
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
-import { CreateInvoiceTcpRequest, InvoiceTcpResponse } from '@common/interfaces/tcp/invoice';
+import {
+  CreateInvoiceTcpRequest,
+  InvoiceTcpResponse,
+  GetInvoiceByPageTcpRequest,
+  GetInvoiceByPageTcpResponse,
+} from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { map } from 'rxjs';
 import { Authorization } from '@common/decorators/authorizer.decorator';
@@ -33,6 +38,19 @@ export class InvoiceController {
         data: body,
         processId,
       })
+      .pipe(map((data) => new ResponseDto(data)));
+  }
+  @Get('')
+  @ApiOkResponse({ type: ResponseDto<InvoiceResponseDto> })
+  @ApiOperation({ summary: 'Get all invoice' })
+  @Authorization({ secured: true })
+  @Permissions([PERMISSION.INVOICE_GET_ALL])
+  getAll(@Query() query: GetInvoiceByPageTcpRequest, @ProcessId() processId: string) {
+    return this.invoiceClient
+      .send<
+        GetInvoiceByPageTcpResponse,
+        GetInvoiceByPageTcpRequest
+      >(TCP_REQUEST_MESSSAGE.INVOICE.GET_ALL_BY_PAGE, { data: query, processId })
       .pipe(map((data) => new ResponseDto(data)));
   }
 }

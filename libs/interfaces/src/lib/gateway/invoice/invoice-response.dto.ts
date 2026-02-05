@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseResponseDto } from '../common/base-response.dto';
 import { INVOICE_STATUS } from '@common/constants/enum/invoice.enum';
+import { PaginationMetaDto } from '../common/base-entity-response.dto';
 export class ClientReponseDto {
   @ApiProperty()
   name: string;
@@ -52,4 +53,11 @@ export class InvoiceResponseDto extends BaseResponseDto {
 
   @ApiPropertyOptional()
   fileUrl?: string;
+}
+
+export class GetInvoiceByPageResponseDto {
+  @ApiProperty({ type: [InvoiceResponseDto] })
+  items: InvoiceResponseDto[];
+  @ApiProperty({ type: PaginationMetaDto })
+  meta: PaginationMetaDto;
 }

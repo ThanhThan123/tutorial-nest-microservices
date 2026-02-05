@@ -1,5 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsEmail, IsNumber, ArrayNotEmpty, ValidateNested, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsNumber,
+  ArrayNotEmpty,
+  ValidateNested,
+  IsArray,
+  IsInt,
+  IsOptional,
+  Min,
+  Max,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 class ClientRequestDto {
   @ApiProperty()
@@ -57,4 +69,24 @@ export class CreateInvoiceRequestDto {
   @IsArray()
   @Type(() => ItemRequestDto)
   items: ItemRequestDto[];
+}
+
+export class GetInvoiceByPageRequestDto {
+  @ApiProperty()
+  @IsInt()
+  @IsOptional()
+  @Min(1)
+  page: number;
+
+  @ApiProperty()
+  @IsInt()
+  @IsOptional()
+  @Min(1)
+  @Max(100)
+  limit: number;
+
+  @ApiProperty()
+  @IsInt()
+  @IsOptional()
+  keyword?: string;
 }

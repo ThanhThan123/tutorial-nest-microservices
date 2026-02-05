@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InvoiceReponsitory } from '../reponsitories/invoice.reponsitory';
-import { CreateInvoiceTcpRequest } from '@common/interfaces/tcp/invoice';
+import { InvoiceReponsitory } from '../repositories/invoice.repository';
+import { CreateInvoiceTcpRequest, GetInvoiceByPageTcpRequest } from '@common/interfaces/tcp/invoice';
 import { invoiceRequestMapping } from '../mappers';
 
 @Injectable()
@@ -10,5 +10,9 @@ export class InvoiceService {
   create(params: CreateInvoiceTcpRequest) {
     const input = invoiceRequestMapping(params);
     return this.invoiceRepository.create(input);
+  }
+
+  getAll(params: GetInvoiceByPageTcpRequest) {
+    return this.invoiceRepository.findPaged(params);
   }
 }
