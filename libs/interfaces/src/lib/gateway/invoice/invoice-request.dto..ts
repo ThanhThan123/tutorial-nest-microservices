@@ -90,3 +90,15 @@ export class GetInvoiceByPageRequestDto {
   @IsOptional()
   keyword?: string;
 }
+
+export class UpdateInvoiceRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @ApiProperty({ type: CreateInvoiceRequestDto })
+  @IsNotEmpty()
+  @Type(() => CreateInvoiceRequestDto)
+  patch: CreateInvoiceRequestDto;
+}

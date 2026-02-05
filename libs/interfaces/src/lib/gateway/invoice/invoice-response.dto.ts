@@ -61,3 +61,11 @@ export class GetInvoiceByPageResponseDto {
   @ApiProperty({ type: PaginationMetaDto })
   meta: PaginationMetaDto;
 }
+
+export class UpdateInvoiceResponseDto {
+  @ApiProperty({ type: String })
+  id: string;
+
+  @ApiProperty({ type: String, enum: INVOICE_STATUS })
+  status: INVOICE_STATUS;
+}

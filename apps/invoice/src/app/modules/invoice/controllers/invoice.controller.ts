@@ -1,4 +1,4 @@
-import { Controller, UseInterceptors } from '@nestjs/common';
+import { Controller, Logger, UseInterceptors } from '@nestjs/common';
 import { InvoiceService } from '../services/invoice.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
@@ -14,7 +14,7 @@ import {
 @UseInterceptors(TcpLoggingInterceptor)
 export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) {}
-
+  private readonly logger = new Logger(InvoiceService.name);
   @MessagePattern(TCP_REQUEST_MESSSAGE.INVOICE.CREATE)
   async create(@RequestParams() params: CreateInvoiceTcpRequest): Promise<Response<InvoiceTcpResponse>> {
     const result = await this.invoiceService.create(params);
@@ -32,5 +32,16 @@ export class InvoiceController {
     const id = (payload?.data ?? payload) as string;
     const dto = await this.invoiceService.getInvoiceById(id);
     return Response.success(dto);
+  }
+  @MessagePattern(TCP_REQUEST_MESSSAGE.INVOICE.UPDATE_BY_ID)
+  async updateInvoiceById(@RequestParams() payload: any): Promise<Response<InvoiceTcpResponse>> {
+    const req = payload?.data ?? payload ?? {};
+    const id = req.id;
+    const patch = req.patch?.patch ?? req.patch;
+
+    const dto = await this.invoiceService.updateInvoiceById(id, patch);
+    this.logger.debug({ id, patch, processId: payload?.processId });
+
+    return Response.success<InvoiceTcpResponse>(dto);
   }
 }

@@ -1,7 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InvoiceReponsitory } from '../repositories/invoice.repository';
-import { CreateInvoiceTcpRequest, GetInvoiceByPageTcpRequest } from '@common/interfaces/tcp/invoice';
+import {
+  CreateInvoiceTcpRequest,
+  GetInvoiceByPageTcpRequest,
+  UpdateInvoiceTcpRequest,
+} from '@common/interfaces/tcp/invoice';
 import { invoiceRequestMapping } from '../mappers';
+import { Invoice } from '@common/schemas/invoice.schema';
+import { UpdateInvoiceRequestDto } from '@common/interfaces/gateway/invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -22,5 +28,9 @@ export class InvoiceService {
     if (!invoice) throw new BadRequestException('invoice not found');
 
     return invoice;
+  }
+
+  async updateInvoiceById(id: string, patch: UpdateInvoiceRequestDto) {
+    return this.invoiceRepository.updateById(id, patch);
   }
 }

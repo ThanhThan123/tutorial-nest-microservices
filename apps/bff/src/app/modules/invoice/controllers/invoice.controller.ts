@@ -1,6 +1,10 @@
-import { Body, Controller, Get, Inject, Logger, Post, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateInvoiceRequestDto, InvoiceResponseDto } from '@common/interfaces/gateway/invoice';
+import { Body, Controller, Get, Inject, Logger, Patch, Post, Query } from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  CreateInvoiceRequestDto,
+  InvoiceResponseDto,
+  UpdateInvoiceRequestDto,
+} from '@common/interfaces/gateway/invoice';
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
@@ -10,6 +14,8 @@ import {
   InvoiceTcpResponse,
   GetInvoiceByPageTcpRequest,
   GetInvoiceByPageTcpResponse,
+  UpdateInvoiceTcpResponse,
+  UpdateInvoiceTcpRequest,
 } from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { map } from 'rxjs';
@@ -59,6 +65,19 @@ export class InvoiceController {
   getOne(@Query('id') id: string, @ProcessId() processId: string) {
     return this.invoiceClient
       .send<InvoiceTcpResponse, string>(TCP_REQUEST_MESSSAGE.INVOICE.GET_BY_ID, { data: id, processId })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
+
+  @ApiBody({ type: UpdateInvoiceRequestDto })
+  @Patch(':id')
+  @ApiOkResponse({ type: ResponseDto<InvoiceResponseDto> })
+  @ApiOperation({ summary: 'Update invoice by id' })
+  update(@Query('id') id: string, @Body() patch: UpdateInvoiceRequestDto, @ProcessId() processId: string) {
+    return this.invoiceClient
+      .send<UpdateInvoiceTcpResponse, any>(TCP_REQUEST_MESSSAGE.INVOICE.UPDATE_BY_ID, {
+        data: { id, patch },
+        processId,
+      })
       .pipe(map((res) => new ResponseDto(res)));
   }
 }

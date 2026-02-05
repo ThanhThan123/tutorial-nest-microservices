@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Invoice, InvoiceModel, InvoiceModelName } from '@common/schemas/invoice.schema';
 import { INVOICE_STATUS } from '@common/constants/enum/invoice.enum';
+import { UpdateInvoiceTcpRequest } from '@common/interfaces/tcp/invoice';
+import { UpdateInvoiceRequestDto } from '@common/interfaces/gateway/invoice';
 
 @Injectable()
 export class InvoiceReponsitory {
@@ -45,8 +47,8 @@ export class InvoiceReponsitory {
     return this.invoiceModel.findById(id).lean().exec();
   }
 
-  updateById(id: string, data: Partial<Invoice>) {
-    return this.invoiceModel.findByIdAndUpdate(id, data, { new: true });
+  updateById(id: string, patch: UpdateInvoiceRequestDto) {
+    return this.invoiceModel.findByIdAndUpdate(id, patch, { new: true, runValidators: true }).exec();
   }
 
   deleteById(id: string) {
