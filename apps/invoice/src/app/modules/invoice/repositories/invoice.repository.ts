@@ -41,8 +41,8 @@ export class InvoiceReponsitory {
     };
   }
 
-  getFindId(id: string) {
-    return this.invoiceModel.findById(id);
+  getById(id: string) {
+    return this.invoiceModel.findById(id).lean().exec();
   }
 
   updateById(id: string, data: Partial<Invoice>) {

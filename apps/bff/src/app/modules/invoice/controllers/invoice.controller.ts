@@ -53,4 +53,12 @@ export class InvoiceController {
       >(TCP_REQUEST_MESSSAGE.INVOICE.GET_ALL_BY_PAGE, { data: query, processId })
       .pipe(map((data) => new ResponseDto(data)));
   }
+  @Get(':id')
+  @ApiOkResponse({ type: ResponseDto<InvoiceResponseDto> })
+  @ApiOperation({ summary: 'Get invoice by id' })
+  getOne(@Query('id') id: string, @ProcessId() processId: string) {
+    return this.invoiceClient
+      .send<InvoiceTcpResponse, string>(TCP_REQUEST_MESSSAGE.INVOICE.GET_BY_ID, { data: id, processId })
+      .pipe(map((res) => new ResponseDto(res)));
+  }
 }
