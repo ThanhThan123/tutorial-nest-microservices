@@ -4,7 +4,7 @@ import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 export enum GRPC_SERVICES {
   AUTHORIZER_SERVICE = 'GRPC_AUTHORIZER_SERVICE',
-  //   USER_ACCESS_SERVICE = 'GRPC_USER_ACCESS_SERVICE',
+  USER_ACCESS_SERVICE = 'GRPC_USER_ACCESS_SERVICE',
 }
 
 export class GrpcConfiguration {
@@ -12,9 +12,9 @@ export class GrpcConfiguration {
   @IsNotEmpty()
   GRPC_AUTHORIZER_SERVICE: GrpcOptions & { name: string };
 
-  //   @IsObject()
-  //   @IsNotEmpty()
-  //     GRPC_USER_ACCESS_SERVICE: GrpcOptions & { name: string };
+  @IsObject()
+  @IsNotEmpty()
+  GRPC_USER_ACCESS_SERVICE: GrpcOptions & { name: string };
 
   constructor() {
     this.GRPC_AUTHORIZER_SERVICE = GrpcConfiguration.setValue({
@@ -22,6 +22,13 @@ export class GrpcConfiguration {
       protoPath: ['./proto/authorizer.proto'],
       host: process.env['AUTHORIZER_SERVICE_HOST'] || 'localhost',
       port: Number(process.env['AUTHORIZER_SERVICE_PORT']) || 5100,
+    });
+
+    this.GRPC_USER_ACCESS_SERVICE = GrpcConfiguration.setValue({
+      key: GRPC_SERVICES.USER_ACCESS_SERVICE,
+      protoPath: ['./proto/user-access.proto'],
+      host: process.env['USER_ACCESS_SERVICE_HOST'] || 'localhost',
+      port: Number(process.env['USER_ACCESS_SERVICE_PORT']) || 5101,
     });
   }
 
