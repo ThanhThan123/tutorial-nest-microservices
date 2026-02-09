@@ -19,6 +19,16 @@ async function bootstrap() {
     },
   });
 
+  Logger.debug('grpc config', AppModule.CONFIGURATION.GRPC_SERV.GRPC_AUTHORIZER_SERVICE);
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: AppModule.CONFIGURATION.GRPC_SERV.GRPC_AUTHORIZER_SERVICE.name,
+      protoPath: AppModule.CONFIGURATION.GRPC_SERV.GRPC_AUTHORIZER_SERVICE.options.protoPath,
+      url: AppModule.CONFIGURATION.GRPC_SERV.GRPC_AUTHORIZER_SERVICE.options.url,
+    },
+  });
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.AUTHORIZE_PORT || 3000;
