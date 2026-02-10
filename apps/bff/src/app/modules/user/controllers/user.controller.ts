@@ -15,7 +15,7 @@ import {
 } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { CreateUserTcpRequest, DeleteUserTcpRequest, UpdateUserTcpRequest } from '@common/interfaces/tcp/user';
-import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { Authorization } from '@common/decorators/authorizer.decorator';
 import { map } from 'rxjs';
 import { Permissions } from '@common/decorators/permission.decorator';
@@ -34,7 +34,7 @@ export class UserController {
   })
   create(@Body() body: CreateUserRequestDto, @ProcessId() processId: string) {
     return this.userAccessClient
-      .send<string, CreateUserTcpRequest>(TCP_REQUEST_MESSSAGE.USER.CREATE, {
+      .send<string, CreateUserTcpRequest>(TCP_REQUEST_MESSAGE.USER.CREATE, {
         data: body,
         processId,
       })
@@ -51,7 +51,7 @@ export class UserController {
   @Authorization({ secured: false })
   getAll(@Req() req: any, @Query() query: GetAllUsersQueryDto, @ProcessId() processId: string) {
     return this.userAccessClient
-      .send<UserGetAllTcpResponse, UserGetAllTcpRequest>(TCP_REQUEST_MESSSAGE.USER.GET_ALL, {
+      .send<UserGetAllTcpResponse, UserGetAllTcpRequest>(TCP_REQUEST_MESSAGE.USER.GET_ALL, {
         data: query,
         processId,
       })
@@ -69,7 +69,7 @@ export class UserController {
   @Permissions([PERMISSION.USER_DELETE])
   delete(@Param('userId') userId: string, @ProcessId() processId: string) {
     return this.userAccessClient
-      .send<DeleteUserTcpRequest, string>(TCP_REQUEST_MESSSAGE.USER.DELETE_BY_USER_ID, {
+      .send<DeleteUserTcpRequest, string>(TCP_REQUEST_MESSAGE.USER.DELETE_BY_USER_ID, {
         data: userId,
         processId,
       })
@@ -89,7 +89,7 @@ export class UserController {
     const data: UpdateUserByUserIdTcpRequest = { userId, patch: body };
 
     return this.userAccessClient
-      .send<string, UpdateUserByUserIdTcpRequest>(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID, {
+      .send<string, UpdateUserByUserIdTcpRequest>(TCP_REQUEST_MESSAGE.USER.UPDATE_BY_USER_ID, {
         data,
         processId,
       })
@@ -107,7 +107,7 @@ export class UserController {
   @Permissions([PERMISSION.USER_GET_BY_ID])
   findOne(@Param('userId') userId: string, @ProcessId() processId: string) {
     return this.userAccessClient
-      .send<FindOneUserRequestDto, string>(TCP_REQUEST_MESSSAGE.USER.FIND_USER_BY_USER_ID, {
+      .send<FindOneUserRequestDto, string>(TCP_REQUEST_MESSAGE.USER.FIND_USER_BY_USER_ID, {
         data: userId,
         processId,
       })

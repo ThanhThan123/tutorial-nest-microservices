@@ -49,6 +49,9 @@ export class InvoiceReponsitory {
   updateById(id: string, patch: UpdateInvoiceRequestDto) {
     return this.invoiceModel.findByIdAndUpdate(id, patch, { new: true, runValidators: true }).exec();
   }
+  updateInvoiceById(id: string, data: Partial<Invoice>) {
+    return this.invoiceModel.findByIdAndUpdate(id, data, { new: true });
+  }
 
   deleteById(id: string): Promise<DeleteResult> {
     return this.invoiceModel.deleteOne({ _id: id }).exec();

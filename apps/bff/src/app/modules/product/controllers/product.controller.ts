@@ -10,7 +10,7 @@ import {
   UpdateProductBySkuRequest,
   UpdateProductRequestDto,
 } from '@common/interfaces/gateway/product';
-import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import {
   CreateProductTcpRequest,
@@ -35,7 +35,7 @@ export class ProductController {
   @Permissions([PERMISSION.PRODUCT_CREATE])
   create(@Body() body: CreateProductRequestDto, @ProcessId() processId: string) {
     return this.productClient
-      .send<ProductTcpResponse, CreateProductTcpRequest>(TCP_REQUEST_MESSSAGE.PRODUCT.CREATE, {
+      .send<ProductTcpResponse, CreateProductTcpRequest>(TCP_REQUEST_MESSAGE.PRODUCT.CREATE, {
         data: body,
         processId,
       })
@@ -50,7 +50,7 @@ export class ProductController {
       .send<
         ProductListTcpResponse,
         GetAllProductTcpRequest
-      >(TCP_REQUEST_MESSSAGE.PRODUCT.GET_LIST, { data: query, processId })
+      >(TCP_REQUEST_MESSAGE.PRODUCT.GET_LIST, { data: query, processId })
       .pipe(map((data) => new ResponseDto(data)));
   }
   @Get(':sku')
@@ -58,7 +58,7 @@ export class ProductController {
   @ApiOperation({ summary: 'Get One Product' })
   getOne(@Param('sku') sku: string, @ProcessId() processId: string) {
     return this.productClient
-      .send<ProductTcpResponse, string>(TCP_REQUEST_MESSSAGE.PRODUCT.GET_ONE_BY_SKU, {
+      .send<ProductTcpResponse, string>(TCP_REQUEST_MESSAGE.PRODUCT.GET_ONE_BY_SKU, {
         data: sku,
         processId,
       })
@@ -71,7 +71,7 @@ export class ProductController {
   @Permissions([PERMISSION.PRODUCT_UPDATE])
   update(@Param('sku') sku: string, @Body() body: UpdateProductRequestDto, @ProcessId() processId: string) {
     return this.productClient
-      .send<ProductUpdateTcpResponse, UpdateProductBySkuRequest>(TCP_REQUEST_MESSSAGE.PRODUCT.UPDATE_PRODUCT_BY_SKU, {
+      .send<ProductUpdateTcpResponse, UpdateProductBySkuRequest>(TCP_REQUEST_MESSAGE.PRODUCT.UPDATE_PRODUCT_BY_SKU, {
         data: { sku, patch: body },
         processId,
       })
@@ -84,7 +84,7 @@ export class ProductController {
   //@Permissions([PERMISSION.PRODUCT_DELETE])
   delete(@Param('id', ParseIntPipe) id: number, @ProcessId() processId: string) {
     return this.productClient
-      .send<string, number>(TCP_REQUEST_MESSSAGE.PRODUCT.DELETE_PRODUCT_BY_ID, { data: id, processId })
+      .send<string, number>(TCP_REQUEST_MESSAGE.PRODUCT.DELETE_PRODUCT_BY_ID, { data: id, processId })
       .pipe(map((res) => new ResponseDto(res)));
   }
 }

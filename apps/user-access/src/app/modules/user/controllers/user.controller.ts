@@ -3,7 +3,7 @@ import { Controller, UseInterceptors } from '@nestjs/common';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
 import { UserService } from '../services/user.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { RequestParams } from '@common/decorators/request-param.decorator';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
@@ -16,31 +16,31 @@ import { User } from '@common/schemas/user.schema';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.CREATE)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.CREATE)
   async create(@RequestParams() data: CreateUserTcpRequest, @ProcessId() processId: string) {
     await this.userService.create(data, processId);
     return Response.success<string>(HTTP_MESSAGE.CREATED);
   }
 
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.GET_ALL)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.GET_ALL)
   async getAll(@RequestParams() payload: any): Promise<Response<UserGetAllTcpResponse>> {
     const params = payload?.data ?? payload ?? {};
     const result = await this.userService.getAll(params);
     return Response.success<UserGetAllTcpResponse>(result);
   }
 
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.GET_BY_USER_ID)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.GET_BY_USER_ID)
   async getByUserId(@RequestParams() userId: string) {
     const user = await this.userService.getUserByUserId(userId);
     return Response.success<User>(user);
   }
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.DELETE_BY_USER_ID)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.DELETE_BY_USER_ID)
   async deleteByUserId(@RequestParams() userId: string): Promise<Response<DeleteUserResponseDto>> {
     const dto = await this.userService.deleteUserByUserId(userId);
     return Response.success(dto);
   }
 
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.UPDATE_BY_USER_ID)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.UPDATE_BY_USER_ID)
   async updateByUserId(@RequestParams() payload: any): Promise<Response<any>> {
     const req = payload?.data ?? payload ?? {};
     const userId = req.userId;
@@ -49,7 +49,7 @@ export class UserController {
     return Response.success(dto);
   }
 
-  @MessagePattern(TCP_REQUEST_MESSSAGE.USER.FIND_USER_BY_USER_ID)
+  @MessagePattern(TCP_REQUEST_MESSAGE.USER.FIND_USER_BY_USER_ID)
   async findOneByUserId(@RequestParams() userId: string): Promise<Response<FindOneUserResponseDto>> {
     const dto = await this.userService.findOneByUserId(userId);
     return Response.success(dto);

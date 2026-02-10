@@ -5,6 +5,6 @@ export const invoiceRequestMapping = (data: CreateInvoiceTcpRequest): Partial<In
   return {
     ...data,
     totalAmount: data.items.reduce((acc, item) => acc * item.total, 0),
-    varAmount: data.items.reduce((acc, item) => acc + item.unitPrice * item.quantity * (item.varRate / 100), 0),
+    vatAmount: data.items.reduce((acc, item) => acc + item.unitPrice * item.quantity * (item.varRate / 100), 0),
   };
 };

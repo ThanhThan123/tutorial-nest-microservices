@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Logger, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Logger, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateInvoiceRequestDto,
@@ -8,7 +8,7 @@ import {
 import { ResponseDto } from '@common/interfaces/gateway/response.interface';
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { TCP_REQUEST_MESSSAGE } from '@common/constants/enum/tcp-request-message.enum';
+import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import {
   CreateInvoiceTcpRequest,
   InvoiceTcpResponse,
@@ -16,6 +16,7 @@ import {
   GetInvoiceByPageTcpResponse,
   UpdateInvoiceTcpResponse,
   UpdateInvoiceTcpRequest,
+  SendInvoiceTcpReq,
 } from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { map } from 'rxjs';
@@ -40,7 +41,7 @@ export class InvoiceController {
   ) {
     Logger.debug('User data', userData);
     return this.invoiceClient
-      .send<InvoiceTcpResponse, CreateInvoiceTcpRequest>(TCP_REQUEST_MESSSAGE.INVOICE.CREATE, {
+      .send<InvoiceTcpResponse, CreateInvoiceTcpRequest>(TCP_REQUEST_MESSAGE.INVOICE.CREATE, {
         data: body,
         processId,
       })
@@ -56,7 +57,7 @@ export class InvoiceController {
       .send<
         GetInvoiceByPageTcpResponse,
         GetInvoiceByPageTcpRequest
-      >(TCP_REQUEST_MESSSAGE.INVOICE.GET_ALL_BY_PAGE, { data: query, processId })
+      >(TCP_REQUEST_MESSAGE.INVOICE.GET_ALL_BY_PAGE, { data: query, processId })
       .pipe(map((data) => new ResponseDto(data)));
   }
   @Get(':id')
@@ -64,7 +65,7 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Get invoice by id' })
   getOne(@Query('id') id: string, @ProcessId() processId: string) {
     return this.invoiceClient
-      .send<InvoiceTcpResponse, string>(TCP_REQUEST_MESSSAGE.INVOICE.GET_BY_ID, { data: id, processId })
+      .send<InvoiceTcpResponse, string>(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_ID, { data: id, processId })
       .pipe(map((res) => new ResponseDto(res)));
   }
 
@@ -74,7 +75,7 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Update invoice by id' })
   update(@Query('id') id: string, @Body() patch: UpdateInvoiceRequestDto, @ProcessId() processId: string) {
     return this.invoiceClient
-      .send<UpdateInvoiceTcpResponse, any>(TCP_REQUEST_MESSSAGE.INVOICE.UPDATE_BY_ID, {
+      .send<UpdateInvoiceTcpResponse, any>(TCP_REQUEST_MESSAGE.INVOICE.UPDATE_BY_ID, {
         data: { id, patch },
         processId,
       })
@@ -86,7 +87,23 @@ export class InvoiceController {
   @ApiOperation({ summary: 'Delete invoice by id' })
   delete(@Query('id') id: string, @ProcessId() processId: string) {
     return this.invoiceClient
-      .send<string, string>(TCP_REQUEST_MESSSAGE.INVOICE.DELETE_BY_ID, { data: id, processId })
+      .send<string, string>(TCP_REQUEST_MESSAGE.INVOICE.DELETE_BY_ID, { data: id, processId })
       .pipe(map((res) => new ResponseDto(res)));
+  }
+
+  @Post(':id/send')
+  @ApiOkResponse({ type: ResponseDto<string> })
+  @ApiOperation({
+    summary: 'Send invoice by id',
+  })
+  @Authorization({ secured: true })
+  @Permissions([PERMISSION.INVOICE_SEND])
+  send(@Param('id') id: string, @ProcessId() processId: string, @UserData() userData: AuthorizedMetadata) {
+    return this.invoiceClient
+      .send<string, SendInvoiceTcpReq>(TCP_REQUEST_MESSAGE.INVOICE.SEND, {
+        data: { invoiceId: id, userId: userData.userId },
+        processId,
+      })
+      .pipe(map((data) => new ResponseDto(data)));
   }
 }
