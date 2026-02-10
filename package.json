@@ -7,7 +7,7 @@
     "nx:reset": "nx reset",
     "nx:run-many": "nx run-many",
     "dev": "pnpm nx:reset && pnpm nx:run-many -t serve",
-    "dev-lite": "pnpm dev --projects=bff,invoice,user-access,authorizer,pdf-generator"
+    "dev-lite": "pnpm dev --projects=bff,invoice,user-access,authorizer,pdf-generator,media"
   },
   "private": true,
   "dependencies": {
