@@ -46,3 +46,5 @@ Thumbs.db
 docker/**/docker_data
 
 docker_data/
+
+.env

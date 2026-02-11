@@ -13,6 +13,12 @@ export class StripeService {
   }
 
   async createCheckoutSession(params: CreateCheckoutSessionRequest) {
+    const invoiceId = String(params?.invoiceId ?? '').trim();
+    if (!invoiceId) {
+      throw new Error(`Missing invoiceId. params=${JSON.stringify(params)}`);
+    }
+    console.log('createCheckoutSession params=', params);
+    console.log('invoiceId=', params?.invoiceId);
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card', 'amazon_pay', 'alipay'],
       mode: 'payment',
@@ -24,13 +30,13 @@ export class StripeService {
           product_data: {
             name: item.name,
           },
-          unit_amount: item.price * 100,
+          unit_amount: Math.round(item.price * 100),
         },
         quantity: item.quantity,
       })),
       customer_email: params.clientEmail,
       metadata: {
-        invoiceId: params.invoiceId,
+        invoiceId,
       },
     });
 

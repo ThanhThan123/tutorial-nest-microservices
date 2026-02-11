@@ -14,6 +14,7 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { PermissionGuard } from '@common/guards/permission.guard';
 import { RedisProvider } from '@common/configuration/redis.config';
 import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
+import { WebhookModule } from './modules/webhook/webhook.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [() => CONFIGURATION] }),
@@ -24,6 +25,7 @@ import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
     ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE)]),
     RedisProvider,
     ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.AUTHORIZER_SERVICE)]),
+    WebhookModule,
   ],
   controllers: [],
   providers: [

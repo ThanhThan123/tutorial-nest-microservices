@@ -43,7 +43,7 @@ export class InvoiceReponsitory {
   }
 
   getById(id: string) {
-    return this.invoiceModel.findById(id).lean().exec();
+    return this.invoiceModel.findById(id).exec();
   }
 
   updateById(id: string, patch: UpdateInvoiceRequestDto) {
@@ -57,3 +57,5 @@ export class InvoiceReponsitory {
     return this.invoiceModel.deleteOne({ _id: id }).exec();
   }
 }
+
+// stripe listen --forward-to localhost:3300/api/v1/webhook/stripe
