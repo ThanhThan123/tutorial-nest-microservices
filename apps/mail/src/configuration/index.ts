@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Kafka } from '@nestjs/microservices/external/kafka.interface';
 import { KafkaConfiguration } from '@common/configuration/kafka.config';
+import { MailConfiguration } from '@common/configuration/mail.config';
 class Configuration extends BaseConfiguration {
   @ValidateNested()
   @Type(() => AppConfiguration)
@@ -12,6 +13,10 @@ class Configuration extends BaseConfiguration {
   @ValidateNested()
   @Type(() => KafkaConfiguration)
   KAFKA_CONFIG = new KafkaConfiguration();
+
+  @ValidateNested()
+  @Type(() => MailConfiguration)
+  MAIL_CONFIG = new MailConfiguration();
 }
 export const CONFIGURATION = new Configuration();
 
