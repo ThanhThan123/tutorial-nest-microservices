@@ -1,6 +1,7 @@
 enum INVOICE {
   CREATE = 'invoice.create',
   GET_ALL_BY_PAGE = 'invoice.get_all_by_page',
+  GET_BY_INVOICE_ID = 'invoice.get_invoice_by_id',
   GET_BY_ID = 'invoice.get_by_id',
   UPDATE_BY_ID = 'invoice.update_by_id',
   DELETE_BY_ID = 'invoice.delete_by_id',

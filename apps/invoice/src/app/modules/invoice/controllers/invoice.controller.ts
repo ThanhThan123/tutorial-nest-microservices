@@ -30,12 +30,13 @@ export class InvoiceController {
     const result = await this.invoiceService.getAll(params);
     return Response.success(result);
   }
-  @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_ID)
+  @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_INVOICE_ID)
   async getInvoiceById(@RequestParams() payload: any): Promise<Response<InvoiceTcpResponse>> {
     const id = (payload?.data ?? payload) as string;
     const dto = await this.invoiceService.getInvoiceById(id);
     return Response.success(dto);
   }
+
   @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.UPDATE_BY_ID)
   async updateInvoiceById(@RequestParams() payload: any): Promise<Response<InvoiceTcpResponse>> {
     const req = payload?.data ?? payload ?? {};
@@ -59,12 +60,17 @@ export class InvoiceController {
     @ProcessId() processId: string,
   ): Promise<Response<string>> {
     const result = await this.invoiceService.sendById(params, processId);
-    return Response.success<string>(result);
+    return Response.success<string>(HTTP_MESSAGE.OK);
   }
 
   @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.UPDATE_INVOICE_PAID)
   async updateInvoicePaid(@RequestParams() invoiceId: string): Promise<Response<string>> {
     await this.invoiceService.updateInvoicePaid(invoiceId);
     return Response.success<string>(HTTP_MESSAGE.UPDATED);
+  }
+  @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_ID)
+  async getByInvoiceId(@RequestParams() invoiceId: string) {
+    const invoice = await this.invoiceService.getById(invoiceId);
+    return Response.success<InvoiceTcpResponse>(invoice);
   }
 }
