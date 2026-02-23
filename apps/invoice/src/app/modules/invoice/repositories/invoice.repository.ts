@@ -5,7 +5,7 @@ import { INVOICE_STATUS } from '@common/constants/enum/invoice.enum';
 import { UpdateInvoiceRequestDto } from '@common/interfaces/gateway/invoice';
 import { DeleteResult } from 'mongodb';
 @Injectable()
-export class InvoiceReponsitory {
+export class InvoiceRepository {
   constructor(@InjectModel(InvoiceModelName) private readonly invoiceModel: InvoiceModel) {}
 
   create(data: Partial<Invoice>) {

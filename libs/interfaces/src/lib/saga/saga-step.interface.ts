@@ -1,7 +1,7 @@
 export interface SagaStepResult {
   success: boolean;
   data?: any;
-  error: string;
+  error?: string;
 }
 
 export interface SagaStep<TContext = any> {
@@ -22,4 +22,16 @@ export interface SagaStepExecution {
   completedAt?: Date;
   error?: string;
   data?: any;
+}
+
+export interface InvoiceSendSagaContext extends SagaContext {
+  invoiceId: string;
+  userId: string;
+  processId: string;
+
+  //step result
+  pdfBase64?: string;
+  fileUrl?: string;
+  paymentLink?: string;
+  sessionId?: string;
 }

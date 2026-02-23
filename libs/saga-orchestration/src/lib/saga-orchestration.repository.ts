@@ -86,4 +86,29 @@ export class SagaOrchestrationRepository {
       )
       .exec();
   }
+
+  async markStepCompensating(sagaId: string, stepIndex: number) {
+    return this.sagaModel
+      .findByIdAndUpdate(
+        sagaId,
+        {
+          [`steps.${stepIndex}.status`]: SAGA_STEP_STATUS.COMPENSATING,
+        },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async markStepCompensated(sagaId: string, stepIndex: number) {
+    return this.sagaModel
+      .findByIdAndUpdate(
+        sagaId,
+        {
+          [`steps.${stepIndex}.status`]: SAGA_STEP_STATUS.COMPENSATED,
+          [`steps.${stepIndex}.completedAt`]: new Date(),
+        },
+        { new: true },
+      )
+      .exec();
+  }
 }

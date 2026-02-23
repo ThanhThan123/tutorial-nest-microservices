@@ -4,12 +4,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { InvoiceDestination } from '@common/schemas/invoice.schema';
 import { InvoiceController } from './controllers/invoice.controller';
 import { InvoiceService } from './services/invoice.service';
-import { InvoiceReponsitory } from './repositories/invoice.repository';
+import { InvoiceRepository } from './repositories/invoice.repository';
 import { ClientsModule } from '@nestjs/microservices';
 import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { PaymentModule } from '../payment/payment.module';
 import { KafkaModule } from '@common/kafka/kafka.module';
 import { QUEUE_SERVICES } from '@common/constants/enum/queue.enum';
+import { InvoiceSendSagaSteps } from './sagas/invoice-send-saga-steps.service';
+import { SagaOrchestrationModule } from '@common/saga-orchestration/saga-orchestration.module';
 @Module({
   imports: [
     MongoProvider,
@@ -20,8 +22,9 @@ import { QUEUE_SERVICES } from '@common/constants/enum/queue.enum';
     ]),
     PaymentModule,
     KafkaModule.register(QUEUE_SERVICES.INVOICE),
+    SagaOrchestrationModule.forRoot(),
   ],
   controllers: [InvoiceController],
-  providers: [InvoiceService, InvoiceReponsitory],
+  providers: [InvoiceService, InvoiceRepository, InvoiceSendSagaSteps],
 })
 export class InvoiceModule {}
