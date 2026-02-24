@@ -48,7 +48,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Get all new user',
   })
-  @Authorization({ secured: false })
+  // @Authorization({ secured: false })
   getAll(@Req() req: any, @Query() query: GetAllUsersQueryDto, @ProcessId() processId: string) {
     return this.userAccessClient
       .send<UserGetAllTcpResponse, UserGetAllTcpRequest>(TCP_REQUEST_MESSAGE.USER.GET_ALL, {
@@ -65,8 +65,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete user',
   })
-  @Authorization({ secured: true })
-  @Permissions([PERMISSION.USER_DELETE])
+  // @Authorization({ secured: true })
+  // @Permissions([PERMISSION.USER_DELETE])
   delete(@Param('userId') userId: string, @ProcessId() processId: string) {
     return this.userAccessClient
       .send<DeleteUserTcpRequest, string>(TCP_REQUEST_MESSAGE.USER.DELETE_BY_USER_ID, {
@@ -83,8 +83,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Update user',
   })
-  @Authorization({ secured: true })
-  @Permissions([PERMISSION.USER_UPDATE])
+  // @Authorization({ secured: true })
+  // @Permissions([PERMISSION.USER_UPDATE])
   update(@Param('userId') userId: string, @Body() body: UpdateUserRequestDto, @ProcessId() processId: string) {
     const data: UpdateUserByUserIdTcpRequest = { userId, patch: body };
 
@@ -103,8 +103,8 @@ export class UserController {
   @ApiOperation({
     summary: 'Find one user',
   })
-  @Authorization({ secured: true })
-  @Permissions([PERMISSION.USER_GET_BY_ID])
+  // @Authorization({ secured: true })
+  // @Permissions([PERMISSION.USER_GET_BY_ID])
   findOne(@Param('userId') userId: string, @ProcessId() processId: string) {
     return this.userAccessClient
       .send<FindOneUserRequestDto, string>(TCP_REQUEST_MESSAGE.USER.FIND_USER_BY_USER_ID, {

@@ -46,7 +46,7 @@ class ItemRequestDto {
 
   @ApiProperty()
   @IsNumber()
-  varRate: number;
+  vatRate: number;
 
   @ApiProperty()
   @IsNumber()

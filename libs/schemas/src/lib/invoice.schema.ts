@@ -27,7 +27,7 @@ export class Item {
   unitPrice: number;
 
   @Prop({ type: Number })
-  varRate: number;
+  vatRate: number;
 
   @Prop({ type: Number })
   total: number;
