@@ -13,7 +13,7 @@ export class ProductRepository {
   }
 
   async findAll() {
-    await this.repo.find();
+    return await this.repo.find();
   }
 
   async findPaged(params: { page: number; limit: number; keyword?: string }) {
@@ -51,5 +51,8 @@ export class ProductRepository {
       },
     });
     return !!result;
+  }
+  async remove(id: number) {
+    return this.repo.delete({ id });
   }
 }

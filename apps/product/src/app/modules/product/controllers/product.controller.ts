@@ -30,6 +30,11 @@ export class ProductController {
     const result = await this.productService.getList(payload);
     return Response.success<ProductListTcpResponse>(result);
   }
+  @MessagePattern(TCP_REQUEST_MESSAGE.PRODUCT.GET_LIST_INVOICE)
+  async getListInvoice(): Promise<Response<ProductTcpResponse[]>> {
+    const result = await this.productService.getListInvoice();
+    return Response.success<ProductTcpResponse[]>(result);
+  }
   @MessagePattern(TCP_REQUEST_MESSAGE.PRODUCT.GET_ONE_BY_SKU)
   async getOne(@RequestParams() sku: string) {
     const result = await this.productService.getOne(sku);
