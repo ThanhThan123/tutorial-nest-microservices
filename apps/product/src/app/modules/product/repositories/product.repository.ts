@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 @Injectable()
-export class ProductReponsitory {
+export class ProductRepository {
   constructor(@InjectRepository(Product) private readonly repo: Repository<Product>) {}
 
   async create(data: Partial<Product>): Promise<Product> {
     const entity = await this.repo.create(data);
     return this.repo.save(entity);
+  }
+
+  async findAll() {
+    await this.repo.find();
   }
 
   async findPaged(params: { page: number; limit: number; keyword?: string }) {
@@ -41,7 +45,10 @@ export class ProductReponsitory {
   }
   async exists(sku: string, name: string): Promise<boolean> {
     const result = await this.repo.findOne({
-      where: [{ sku }, { name }],
+      where: {
+        sku,
+        name,
+      },
     });
     return !!result;
   }

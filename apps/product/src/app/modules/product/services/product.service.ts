@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { ProductReponsitory } from '../repositories/product.repository';
+import { ProductRepository } from '../repositories/product.repository';
 import {
   CreateProductTcpRequest,
   GetAllProductTcpRequest,
@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly productReponsitory: ProductReponsitory) {}
+  constructor(private readonly productReponsitory: ProductRepository) {}
 
   async create(data: CreateProductTcpRequest) {
     const { sku, name } = data;
@@ -64,5 +64,9 @@ export class ProductService {
   }
   async deleteProduct(id: number) {
     return await this.productReponsitory.deleteProduct(id);
+  }
+
+  getListInvoice() {
+    return this.productReponsitory.findAll();
   }
 }
