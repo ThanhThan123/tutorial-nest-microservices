@@ -45,4 +45,8 @@ export class StripeService {
       sessionId: session.id,
     };
   }
+
+  expireCheckoutSession(sessionId: string) {
+    return this.stripe.checkout.sessions.expire(sessionId);
+  }
 }
