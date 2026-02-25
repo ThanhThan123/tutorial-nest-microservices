@@ -16,6 +16,7 @@ import { RedisProvider } from '@common/configuration/redis.config';
 import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { HealthModule } from './modules/health/health.module';
+import { LoggerModule } from '@common/observability/logger';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [() => CONFIGURATION] }),
@@ -28,6 +29,7 @@ import { HealthModule } from './modules/health/health.module';
     ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.AUTHORIZER_SERVICE)]),
     WebhookModule,
     HealthModule,
+    LoggerModule.forRoot('bff'),
   ],
   controllers: [],
   providers: [
