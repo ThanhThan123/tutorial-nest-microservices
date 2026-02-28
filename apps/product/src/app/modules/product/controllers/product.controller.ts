@@ -13,9 +13,9 @@ import {
   UpdateProductBySkuTcpRequest,
 } from '@common/interfaces/tcp/product';
 import { RequestParams } from '@common/decorators/request-param.decorator';
-
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

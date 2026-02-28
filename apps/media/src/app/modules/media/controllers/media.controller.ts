@@ -6,8 +6,10 @@ import { UploadFileTcpReq, UploadFileTcpRes } from '@common/interfaces/tcp/media
 import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { MediaService } from '../services/media.service';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
+import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
 @Controller()
-@UseInterceptors()
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 

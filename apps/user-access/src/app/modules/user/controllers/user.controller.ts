@@ -11,8 +11,9 @@ import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
 import { UserGetAllTcpResponse, DeleteUserResponseDto, FindOneUserResponseDto } from '@common/interfaces/gateway/user';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { User } from '@common/schemas/user.schema';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -13,8 +13,9 @@ import {
 } from '@common/interfaces/tcp/invoice';
 import { ProcessId } from '@common/decorators/processId.decorator';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) {}
   private readonly logger = new Logger(InvoiceService.name);

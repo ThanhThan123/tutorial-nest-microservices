@@ -4,9 +4,8 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { UserController } from './controllers/user.controller';
 
 @Module({
-  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.USER_ACCESS_SERVICE)])],
   controllers: [UserController],
-  providers: [],
+  providers: [TcpProvider(TCP_SERVICES.USER_ACCESS_SERVICE)],
   exports: [],
 })
 export class UserModule {}

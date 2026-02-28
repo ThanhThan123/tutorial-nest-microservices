@@ -25,7 +25,6 @@ import { MetricsModule } from '@common/observability/metrics';
     ProductModule,
     UserModule,
     AuthorizerModule,
-    ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE)]),
     RedisProvider,
     ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.AUTHORIZER_SERVICE)]),
     WebhookModule,
@@ -44,6 +43,7 @@ import { MetricsModule } from '@common/observability/metrics';
       provide: APP_GUARD,
       useClass: PermissionGuard,
     },
+    TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE),
   ],
 })
 export class AppModule {
